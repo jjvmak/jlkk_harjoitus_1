@@ -73,6 +73,7 @@ for i in range(0, len(devalData)):
         if (tmp == asdList[n]):
             deval_features.append(n)
             
+            
 test_features = []
 for i in range(0, len(testData)):
     tmp = testData[i]['service_name']
@@ -81,21 +82,25 @@ for i in range(0, len(testData)):
             test_features.append(n)
         
         
-vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1,1), use_idf=False, norm='l2')
+vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1,2), use_idf=False, norm='l2')
 vectorizer.fit(trainStr)
 
 train_vectors = vectorizer.transform(trainStr).toarray()
 devel_vectors = vectorizer.transform(devalStr).toarray()
 test_vectors = vectorizer.transform(testStr).toarray()
 
-classifier = SVC(kernel='linear', C=0.001)
+classifier = SVC(kernel='linear', C=1.3)
 
 classifier.fit(train_vectors, features)
 
-devel_predictions = classifier.predict(devel_vectors)
+lol = (classifier.predict(vectorizer.transform(['Hei! Edesmennyt äitini osti aikoinaan Turusta huutokaupasta vanhan nuken, joka ilmeisesti on Martta-nukke. Olen kiinnostunut tietämään mm. sen, kuinka vanha se on. Onko museokeskuksessa henkilöä, joka on perehtynyt nukkeihin?.']).toarray())[0])
+print(asdList[lol])
+#print(asdList[])
 
-print("Devel set accuracy: %s" % accuracy_score(deval_features, devel_predictions))
-print ("Test set accuracy: %s" % accuracy_score(test_features, classifier.predict(test_vectors)))
+#devel_predictions = classifier.predict(devel_vectors)
+
+#print("Devel set accuracy: %s" % accuracy_score(deval_features, devel_predictions))
+#print ("Test set accuracy: %s" % accuracy_score(test_features, classifier.predict(test_vectors)))
 
 
 
