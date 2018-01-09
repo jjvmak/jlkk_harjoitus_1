@@ -90,7 +90,7 @@ vectorizer.fit(trainStr)
 train_vectors = vectorizer.transform(trainStr).toarray()
 devel_vectors = vectorizer.transform(devalStr).toarray()
 test_vectors = vectorizer.transform(testStr).toarray()
-classifier = SVC(kernel='linear', C=7.0)
+classifier = SVC(kernel='linear', C=15.0)
 classifier.fit(train_vectors, features)
 devel_predictions = classifier.predict(devel_vectors)
 print("Devel set accuracy: %s" % accuracy_score(deval_features, devel_predictions))
@@ -115,5 +115,9 @@ test4 = (classifier.predict(vectorizer.transform(['Voisiko Aurakadun ja Puutarha
 print(asdList[test4])
 
 #liikennevalot
-test5 = (classifier.predict(vectorizer.transform(['Martinsillan kohdalla olevat liikennevalot eivät toimi!']).toarray())[0])
-print(asdList[test5])         
+test5 = (classifier.predict(vectorizer.transform(['Martinsillan suojatien kohdalla olevat liikennevalot eivät toimi!']).toarray())[0])
+print(asdList[test5]) 
+
+#parkkipaikat
+test6 = (classifier.predict(vectorizer.transform(['Hei! Puistokatu 10 vinoparkkien puhdistus olisi tarpeen.Liiketilaan mennessä kenkien mukana tulee paljon likaa ja on muutenkin todella liukkaat astuessaan autosta ulos.']).toarray())[0])
+print(asdList[test6])        
