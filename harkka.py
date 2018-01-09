@@ -57,7 +57,9 @@ for i in range(sixtyPercent+twentyPercent, len(data)):
     testData.append(data[i])
     testStr.append(data[i]['description'])
     
-
+#PIIRTEIDEN LUONTI
+#piirteet valittiin siten, että palautteeseen liittyvä service_name on aina
+#kyseisen palautteen piirre.
 asdList = list(asdSet)
 features = []
 for i in range(0, len(trainData)):
@@ -81,30 +83,37 @@ for i in range(0, len(testData)):
         if (tmp == asdList[n]):
             test_features.append(n)
         
-        
-vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1,2), use_idf=False, norm='l2')
+    
+#KOULUTUS   
+vectorizer = TfidfVectorizer(analyzer='char', ngram_range=(1,2), use_idf=True, norm='l2')
 vectorizer.fit(trainStr)
-
 train_vectors = vectorizer.transform(trainStr).toarray()
 devel_vectors = vectorizer.transform(devalStr).toarray()
 test_vectors = vectorizer.transform(testStr).toarray()
-
-classifier = SVC(kernel='linear', C=1.3)
-
+classifier = SVC(kernel='linear', C=7.0)
 classifier.fit(train_vectors, features)
-
-lol = (classifier.predict(vectorizer.transform(['Hei! Edesmennyt äitini osti aikoinaan Turusta huutokaupasta vanhan nuken, joka ilmeisesti on Martta-nukke. Olen kiinnostunut tietämään mm. sen, kuinka vanha se on. Onko museokeskuksessa henkilöä, joka on perehtynyt nukkeihin?.']).toarray())[0])
-print(asdList[lol])
-#print(asdList[])
-
-#devel_predictions = classifier.predict(devel_vectors)
-
-#print("Devel set accuracy: %s" % accuracy_score(deval_features, devel_predictions))
-#print ("Test set accuracy: %s" % accuracy_score(test_features, classifier.predict(test_vectors)))
+devel_predictions = classifier.predict(devel_vectors)
+print("Devel set accuracy: %s" % accuracy_score(deval_features, devel_predictions))
+print ("Test set accuracy: %s" % accuracy_score(test_features, classifier.predict(test_vectors)))
 
 
+#TESTAUS
+#kadut ajoradat
+test1 = (classifier.predict(vectorizer.transform(['Katu huonossa kunnossa Vuorensyrjänkadulla. Tiessä kuoppia.']).toarray())[0])
+print(asdList[test1])
 
+#ulkovalaistus
+test2 = (classifier.predict(vectorizer.transform(['Ulkovalaistus on heikkoa Hämeentiellä. Voisiko asiaa korjata?']).toarray())[0])
+print(asdList[test2])
 
+#katujen puhtaanapito
+test3 = (classifier.predict(vectorizer.transform(['Muuten viihtyisästä pientaloalueesta tulee epäsiisti kuva, koska yksi kiinteistö ei huolehdi katualueen puhtaanapidosta. Tilanne on pysynyt samanlaisena vuosia.']).toarray())[0])
+print(asdList[test3])
 
+#liikennevalot
+test4 = (classifier.predict(vectorizer.transform(['Voisiko Aurakadun ja Puutarhakadun kulmaan lisätä liikennevalot suojatien kohdalle? Siinä on meinattu usemmankin kerran jäädä auton alle.']).toarray())[0])
+print(asdList[test4])
 
-            
+#liikennevalot
+test5 = (classifier.predict(vectorizer.transform(['Martinsillan kohdalla olevat liikennevalot eivät toimi!']).toarray())[0])
+print(asdList[test5])         
